@@ -120,3 +120,14 @@ allprojects { project ->
     }
   }
 }
+
+tasks.register("install") {
+  def publishTasks = []
+  project.subprojects.forEach { project ->
+    def installTask = project.tasks.findByName("install") ?: project.tasks.findByName("publishToMavenLocal")
+    if (installTask != null) {
+      publishTasks.add(installTask)
+    }
+  }
+  dependsOn publishTasks
+}
